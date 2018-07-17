@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Test Application</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.min.js"></script>
+    <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+   
+  </head>
+  <body>
+      <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+          <a class="navbar-brand" href="#">Test Application</a>
+          <button class="navbar-toggler hidden-lg-up" type="button" data-toggle="collapse" data-target="#collapsibleNavId" aria-controls="collapsibleNavId"
+              aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="collapsibleNavId">
+              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                  <li class="nav-item active">
+                      <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                  </li>
+                  
+                  
+              </ul>
+              
+          </div>
+      </nav>
+      <div class="container" ng-app="myApp" ng-controller="myController">
+          <div class="row">
+              <div class="col-sm-12 col-md-6">
+                  <table class="table table-bordered mt-1">
+                      
+                          <tr align="center">
+                              <th>SNo.</th>
+                              <th>Label</th>
+                              <th>Values</th>
+                              <th>Remove?</th>
+                          </tr>
+                          <tr ng-repeat="fulldata in tableData" align="center">
+                              <td>{{$index+1}}</td>
+                              <td>{{fulldata.name}}</td>
+                              <td>{{fulldata.number}}</td>
+                              <td><input type="checkbox" ng-model="fulldata.Remove"></td>
+                          </tr>
+                      
+
+                      
+                  </table>
+
+              </div>
+              <div class="col-sm-12 col-md-6">
+                  <!--chart-->
+                  <div id="chartData" style="height: 300px; width: 100%" class="mt-1"></div>
+                  <div class="container">
+                      <div class="row">
+                          <div class="col-sm-12">
+                              <!-- Button trigger modal -->
+                              <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#modelId">
+                                Add New Data
+                              </button>
+                              
+                              <!-- Modal -->
+                              <div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+                                  <div class="modal-dialog" role="document">
+                                      <div class="modal-content">
+                                          <div class="modal-header">
+                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                      </button>
+                                              <h4 class="modal-title bg-primary" id="modelTitleId"></h4>
+                                          </div>
+                                          <div class="modal-body">
+                                              <div class="form-group">
+                                                <label for="name">Enter Label Name</label>
+                                                <input type="text"
+                                                  class="form-control" ng-model="name" id="name" aria-describedby="helpId" placeholder="Enter Label Name">
+                                                
+                                              </div>
+                                              <div class="form-group">
+                                                    <label for="number">Enter Value</label>
+                                                    <input type="number" id="number"
+                                                      class="form-control" ng-model="number" aria-describedby="helpId" placeholder="Enter Label Value">
+                                                    
+                                                  </div>
+                                              
+                                          </div>
+                                          <div class="modal-footer">
+                                              <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                                              <button type="button" class="btn btn-primary" ng-click="addRow()">Add Data</button>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="col-sm-12">
+                              <Button class="btn btn-danger btn-block mt-1" ng-click="removeRow()"> Remove Row</Button>
+                              <mark>Choose the rows to remove!!</mark>
+                              
+                          </div>
+                      </div>
+                  </div>
+                  
+                </div>
+          </div>
+      </div>
+      
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  </body>
+
+  
+  <script>
+      var app=angular.module('myApp',[]);
+      app.controller('myController',function ($scope) {
+          $scope.tableData=[];
+
+          //add new row to the table
+          $scope.addRow=function(){
+              if($scope.name!=undefined && $scope.number!=undefined){
+                  var datas=[];
+                  datas.name=$scope.name;
+                  datas.number=$scope.number;
+                  $scope.tableData.push(datas);
+
+                  //clear the input
+                  $scope.name=null;
+                  $scope.number=null;
+              }
+          }
+          //remove row
+          $scope.removeRow=function(){
+              var remData=[];
+              angular.forEach($scope.tableData,function(value){
+                  if(!value.Remove){
+                      remData.push(value);
+                  }
+              });
+              $scope.tableData=remData;
+          }
+          //chart
+          
+          
+            
+          
+          var updateChart=function(){
+            var chart=new CanvasJS.Chart('chartData',{
+               
+              title:{
+                  text:"test data"
+              },
+              axisX:{
+                title: "Labels",
+                gridThickness: 2
+              },
+       
+       
+              axisY:{
+                title: "Values",
+                  
+              },
+              data:[{
+                  type:"column",
+                  dataPoints: $scope.tableData
+              }]
+              
+          });
+              
+              chart.render();
+              
+
+          }
+          setInterval(function () {
+              updateChart()
+            },500);
+        }); 
+      
+  </script>
+</html>
